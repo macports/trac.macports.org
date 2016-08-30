@@ -1,12 +1,10 @@
 /* MacPorts Ticket Guide Links */
 .macports-ticket-guide {
-        text-align: center;
-        color: red;
-        font-weight: bold;
-        font-size: 1.2em;
-}
-
-.macports-ticket-guide a {
-        color: #990000;
-        font-size: 1.2em;
+    background: #fdc;
+    border: 2px solid #d00;
+    font-style: italic;
+    margin: 1em 1em;
+    padding: 1em 1em;
+    text-align: center;
+    font-size: 1.2em;
 }
