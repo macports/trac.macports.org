@@ -19,11 +19,13 @@
     </head>
 
     <form py:match="div[@id='content' and @class='ticket']/form" py:attrs="select('@*')">
+        <py:if test="req.path_info == '/newticket' and (not 'preview' in req.args)">
         <div class="macports-ticket-guide">
             Please read the
             <a href="http://guide.macports.org/#project.tickets">Ticket Guidelines</a>
             before submitting!
         </div>
+        </py:if>
         ${select('*')}
     </form>
 
