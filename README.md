@@ -21,5 +21,5 @@ To run a local copy:
   /path/to/this/repo`.
 
 ## Sending Pull Requests
-Feel free to open pull requests for this repository. Feel free to ping
-@macports/infrastructure.
+Feel free to open pull requests for this repository. Talk to
+@macports/infrastructure for specific questions and deployment.
