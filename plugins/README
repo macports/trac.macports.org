@@ -1,0 +1,44 @@
+This Trac installation is using the following plugins:
+
+  trac-github
+  navadd
+  TracSpamFilter
+  CcMe
+  MacPortsTicketsModule
+  WikiNotification
+  AutocompleteUsersPlugin
+  UsernameDecoratePlugin 
+
+Old trac.macports.org on Mac OS Forge had these:
+
+  o  BatchModify                     0.8.0-trac0.12         /var/trac/plugins/BatchModify-0.8.0_trac0.12-py2.6.egg
+  x  CcMe                            1.1                    /usr/lib/python2.6/site-packages/CcMe-1.1-py2.6.egg
+  -  IgneousAuthenticationModule     2.0                    /usr/lib/python2.6/site-packages/IgneousAuthenticationModule-2.0-py2.6.egg
+  -  IgneousNavigationModule         2.0                    /usr/lib/python2.6/site-packages/IgneousNavigationModule-2.0-py2.6.egg
+  x  MacPortsTicketsModule           1.0                    /usr/lib/python2.6/site-packages/MacPortsTicketsModule-1.0-py2.6.egg
+  x  TracSpamFilter                  0.4.7dev-r10756        /usr/lib/python2.6/site-packages
+  o  TracTicketDelete                2.0                    /usr/lib/python2.6/site-packages
+  x  TracWikiNotification            0.2.3                  /usr/lib/python2.6/site-packages/TracWikiNotification-0.2.3-py2.6.egg
+
+x = installed
+- = not needed anymore, replaced by other functionality
+o = obsolete, in Trac itself
+
+TODO:
+
+  * https://trac-hacks.org/wiki/DynamicFieldsPlugin
+    Hide version/milestone/etc. based on component ports/base
+
+  * https://trac-hacks.org/wiki/XmlRpcPlugin
+    Is it useful without authentication? How to get an API token?
+
+  * https://trac.edgewall.org/wiki/CommitTicketUpdater
+    Enable only *AFTER* importing the git repository or it will trigger on importing changesets
+
+
+
+Rejected:
+
+  * https://trac-hacks.org/wiki/ReadmePlugin
+    Convert README.md MarkDown into HTML
+    (Not necessary as we are not enabling the code browser on Trac)
