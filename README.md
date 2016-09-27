@@ -9,7 +9,9 @@ To run a local copy:
 - Install Trac 1.0 in a virtualenv
 - Copy `conf/secrets.ini.example` to `conf/secrets.ini`
 - Configure a database connection string in `conf/secrets.ini`. See the
-  [Trac documentation on database connection strings][1] for more information.
+  [Trac documentation on database connection
+  strings](https://trac.edgewall.org/wiki/TracEnvironment#DatabaseConnectionStrings)
+  for more information.
 - Since GitHub login, GitHub group synchronization and GitHub webhooks will not
   work in your test environment, leave `client_id`, `client_secret`,
   `access_token` and `webhook_secret` unconfigured.
@@ -21,5 +23,3 @@ To run a local copy:
 ## Sending Pull Requests
 Feel free to open pull requests for this repository. Feel free to ping
 @macports/infrastructure.
-
-[1] https://trac.edgewall.org/wiki/TracEnvironment#DatabaseConnectionStrings
