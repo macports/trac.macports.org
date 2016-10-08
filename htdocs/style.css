@@ -13,6 +13,17 @@ h4 :link, h4 :visited, h5 :link, h5 :visited, h6 :link, h6 :visited {
     color: #0155CD;
 }
 
+/* special rules for logout button */
+#metanav form.trac-logout button {
+    text-decoration: none;
+    color: #0155CD;
+    border-bottom: none;
+}
+#metanav form.trac-logout button:hover {
+    color: #3591ED;
+    background-color: transparent;
+}
+
 /* newticket: MacPorts ticket guide link */
 .macports-ticket-guide {
     width: 34em;
