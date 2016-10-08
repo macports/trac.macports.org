@@ -1,10 +1,60 @@
-/* MacPorts Ticket Guide Links */
+/* Link styles */
+:link, :visited {
+    text-decoration: none;
+    color: #0155CD;
+    border-bottom: none;
+}
+:link:hover, :visited:hover {
+    color: #3591ED;
+    background-color: transparent;
+}
+h1 :link, h1 :visited, h2 :link, h2 :visited, h3 :link, h3 :visited,
+h4 :link, h4 :visited, h5 :link, h5 :visited, h6 :link, h6 :visited {
+    color: #0155CD;
+}
+
+/* newticket: MacPorts ticket guide link */
 .macports-ticket-guide {
+    width: 34em;
+    max-width: 100%;
     background: #fdc;
     border: 2px solid #d00;
     font-style: italic;
-    margin: 1em 1em;
+    margin: 0 auto;
     padding: 1em 1em;
     text-align: center;
     font-size: 1.2em;
+}
+
+/* tickets: wide view */
+#content.ticket {
+    width: 58em;
+    min-width: 75%;
+    max-width: 100%;
+}
+
+/* tickets: colors */
+#ticket {
+    background-color: #eee;
+    border-color: #d7d7d7;
+}
+
+#ticket .date {
+    color: #aaa;
+}
+
+#ticket table.properties {
+    border-top-color: #d7d7d7;
+}
+
+#ticket div.description h3 {
+    border-bottom-color: #d7d7d7;
+}
+
+#ticket table.properties > tbody > tr > th.missing {
+    color: #aaa;
+}
+
+fieldset {
+    background-color: #eee;
 }
