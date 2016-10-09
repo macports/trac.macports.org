@@ -3,11 +3,12 @@ This Trac installation is using the following plugins:
   trac-github
   navadd
   TracSpamFilter
-  CcMe
-  MacPortsTicketsModule
+  CcMe (custom)
+  MacPortsTicketsModule (custom)
   WikiNotification
   AutocompleteUsersPlugin
   UsernameDecoratePlugin 
+  TracUserMigration (custom)
 
 Old trac.macports.org on Mac OS Forge had these:
 
