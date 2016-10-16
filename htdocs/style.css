@@ -69,3 +69,13 @@ h4 :link, h4 :visited, h5 :link, h5 :visited, h6 :link, h6 :visited {
 fieldset {
     background-color: #eee;
 }
+
+/* reports: colors */
+.report div.reports h3 em {
+    color: #0155CD;
+}
+
+/* milestones: colors */
+.milestone .info h2 em {
+    color: #0155CD;
+}
