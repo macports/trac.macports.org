@@ -14,6 +14,15 @@ git_multimail.FOOTER_TEMPLATE = "\n"
 git_multimail.REVISION_FOOTER_TEMPLATE = "\n"
 git_multimail.COMBINED_FOOTER_TEMPLATE = "\n"
 
+git_multimail.LINK_TEXT_TEMPLATE = """\
+View on GitHub:
+%(browse_url)s
+
+"""
+
+git_multimail.LINK_HTML_TEMPLATE = """\
+<p><a href="%(browse_url)s">View on GitHub</a></p>
+"""
 
 
 class GitHubWebhookEnvironment(GenericEnvironment):
