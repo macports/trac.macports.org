@@ -24,8 +24,6 @@ in repository %(repo_shortname)s.
 """
 
 git_multimail.COMBINED_INTRO_TEMPLATE = """\
-This is an automated email from the git hooks/post-receive script.
-
 %(pusher)s pushed a commit to %(refname_type)s %(short_refname)s
 in repository %(repo_shortname)s.
 
