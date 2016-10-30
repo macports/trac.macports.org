@@ -9,6 +9,28 @@ import git_multimail
 from git_multimail import GenericEnvironment, Config, ConfigurationException, \
                           OutputMailer, ReferenceChange, Push
 
+### TEMPLATES ###
+
+git_multimail.REFCHANGE_INTRO_TEMPLATE = """\
+%(pusher)s pushed a change to %(refname_type)s %(short_refname)s
+in repository %(repo_shortname)s.
+
+"""
+
+git_multimail.REVISION_INTRO_TEMPLATE = """\
+%(pusher)s pushed a commit to %(refname_type)s %(short_refname)s
+in repository %(repo_shortname)s.
+
+"""
+
+git_multimail.COMBINED_INTRO_TEMPLATE = """\
+This is an automated email from the git hooks/post-receive script.
+
+%(pusher)s pushed a commit to %(refname_type)s %(short_refname)s
+in repository %(repo_shortname)s.
+
+"""
+
 # Remove footer, unsubscribing is offered by mailing list
 git_multimail.FOOTER_TEMPLATE = "\n"
 git_multimail.REVISION_FOOTER_TEMPLATE = "\n"
@@ -23,6 +45,9 @@ View on GitHub:
 git_multimail.LINK_HTML_TEMPLATE = """\
 <p><a href="%(browse_url)s">View on GitHub</a></p>
 """
+
+
+### MAIN ###
 
 
 class GitHubWebhookEnvironment(GenericEnvironment):
