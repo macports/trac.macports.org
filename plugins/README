@@ -9,6 +9,7 @@ This Trac installation is using the following plugins:
   AutocompleteUsersPlugin
   UsernameDecoratePlugin 
   TracUserMigration (custom)
+  Configurable CommitTicketUpdater (custom), see https://github.com/neverpanic/trac-configurable-ctu
 
 Old trac.macports.org on Mac OS Forge had these:
 
@@ -32,10 +33,6 @@ TODO:
 
   * https://trac-hacks.org/wiki/XmlRpcPlugin
     Is it useful without authentication? How to get an API token?
-
-  * https://trac.edgewall.org/wiki/CommitTicketUpdater
-    Enable only *AFTER* importing the git repository or it will trigger on importing changesets
-
 
 
 Rejected:
