@@ -41,7 +41,7 @@ View on GitHub:
 """
 
 git_multimail.LINK_HTML_TEMPLATE = """\
-<p><a href="%(browse_url)s">View on GitHub</a></p>
+<p><a href="%(browse_url)s">%(browse_url)s</a></p>
 """
 
 
