@@ -3,11 +3,14 @@
 """trac-github-update hook sending mails with git-multimail"""
 
 import sys
+import os
 import json
 
 import git_multimail
 from git_multimail import GenericEnvironment, Config, ConfigurationException, \
                           OutputMailer, ReferenceChange, Push
+from github import Github
+
 
 ### TEMPLATES ###
 
@@ -49,8 +52,11 @@ git_multimail.LINK_HTML_TEMPLATE = """\
 
 
 class GitHubWebhookEnvironment(GenericEnvironment):
-    def __init__(self, **kw):
+    def __init__(self, github, **kw):
+        self._github = github
         self._data = None
+        self._pusher = None
+        self._pusher_email = None
         super(GenericEnvironment, self).__init__(**kw)
 
     def load_payload(self, payload):
@@ -58,19 +64,31 @@ class GitHubWebhookEnvironment(GenericEnvironment):
         return self._data
 
     def get_pusher(self):
+        if self._pusher:
+            return self._pusher
         if not self._data:
             return super(GenericEnvironment).get_pusher()
-        return self._data['pusher']['name'].encode('utf-8')
+        login = self._data['pusher']['name'].encode('utf-8')
+        realname = self._github.get_user(login).name
+        if realname:
+            self._pusher = "%s (%s)" % (realname, login)
+        else:
+            self._pusher = login
+        return self._pusher
 
     def get_pusher_email(self):
+        if self._pusher_email:
+            return self._pusher_email
         if not self._data:
             return super(GenericEnvironment).get_pusher_email()
-        # GitHub always lists the primary email address in the payload,
-        # but we do not want to expose those to the public
-        # XXX: in lack of a better solution, always use a static sender email
-        name = self._data['pusher']['name'].encode('utf-8')
-        email = "%s@users.noreply.github.com" % (name,)
-        return "%s <%s>" % (name, email)
+        login = self._data['pusher']['name'].encode('utf-8')
+        name = self._github.get_user(login).name or login
+        # GitHub only lists the primary email address in the payload. We do not
+        # want to expose it to the public, and sending with these addresses
+        # would also violate SPF. Use a static sender email instead.
+        email = "%s@users.noreply.github.com" % (login,)
+        self._pusher_email = "%s <%s>" % (name, email)
+        return self._pusher_email
 
 
 def run_as_github_webhook(environment, mailer):
@@ -105,9 +123,19 @@ def main(args):
     # git-multimail:
     config = Config('multimailhook')
 
+    token = os.getenv("GITHUB_ACCESS_TOKEN")
+    if not token:
+        token = config.get("githubAccessToken")
+    if not token:
+        sys.stderr.write("Set GITHUB_ACCESS_TOKEN in environment or " +
+                         "'git config multimailhook.githubAccessToken <token>'!\n")
+        sys.exit(1)
+
+    github = Github(token)
+
     # Select the type of environment:
     try:
-        environment = GitHubWebhookEnvironment(config=config)
+        environment = GitHubWebhookEnvironment(github, config=config)
     except ConfigurationException:
         sys.stderr.write("%s\n" % sys.exc_info()[1])
         sys.exit(1)
