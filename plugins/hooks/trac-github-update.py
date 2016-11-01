@@ -68,27 +68,27 @@ class GitHubWebhookEnvironment(GenericEnvironment):
             return self._pusher
         if not self._data:
             return super(GenericEnvironment).get_pusher()
-        login = self._data['pusher']['name'].encode('utf-8')
+        login = self._data['pusher']['name']
         realname = self._github.get_user(login).name
         if realname:
             self._pusher = "%s (%s)" % (realname, login)
         else:
             self._pusher = login
-        return self._pusher
+        return self._pusher.encode('utf-8')
 
     def get_pusher_email(self):
         if self._pusher_email:
             return self._pusher_email
         if not self._data:
             return super(GenericEnvironment).get_pusher_email()
-        login = self._data['pusher']['name'].encode('utf-8')
+        login = self._data['pusher']['name']
         name = self._github.get_user(login).name or login
         # GitHub only lists the primary email address in the payload. We do not
         # want to expose it to the public, and sending with these addresses
         # would also violate SPF. Use a static sender email instead.
         email = "%s@users.noreply.github.com" % (login,)
         self._pusher_email = "%s <%s>" % (name, email)
-        return self._pusher_email
+        return self._pusher_email.encode('utf-8')
 
 
 def run_as_github_webhook(environment, mailer):
