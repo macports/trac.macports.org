@@ -115,9 +115,10 @@ def main(args):
     # Choose the method of sending emails based on the git config:
     mailer = git_multimail.choose_mailer(config, environment)
 
-    # OutputMailer is intended only for testing; it writes the emails to
-    # the specified file stream.
-    #mailer = OutputMailer(sys.stdout)
+    if "-n" in args:
+        # OutputMailer is intended only for testing; it writes the emails to
+        # the specified file stream.
+        mailer = OutputMailer(sys.stdout)
 
     # Send notification emails:
     run_as_github_webhook(environment, mailer)
