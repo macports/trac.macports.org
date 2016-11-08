@@ -90,15 +90,19 @@ class GitHubAPI(object):
         self.github = Github(githubtoken)
         self.cache = {}
 
-    def get_user(self, username):
+    def get_user(self, username, knownname=None, knownemail=None):
         if username in self.cache:
             return self.cache[username]
-        name = self.github.get_user(username).name
+        name = knownname
+        if not name:
+            name = self.github.get_user(username).name
         # GitHub only lists the primary email address in the payload. We do not
         # want to expose it to the public. The profile may not have any public
         # address. Use a static sender email instead.
-        email = "%s@users.noreply.github.com" % (username,)
-        if name:
+        email = knownemail
+        if not email:
+            email = "%s@users.noreply.github.com" % (username,)
+        if name and email:
             self.cache[username] = (name, email)
             return self.cache[username]
         return (None, None)
@@ -136,7 +140,7 @@ class GitHubWebhookEnvironment(GenericEnvironment):
                 result = username
         return result
 
-    def _get_username_email(self, username):
+    def _get_username_email(self, username, knownname=None, knownemail=None):
         result = None
         # Get name and email from Trac DB
         name, email = self._tracdb.get_user(username)
@@ -144,7 +148,7 @@ class GitHubWebhookEnvironment(GenericEnvironment):
             result = "%s <%s>" % (name, email)
         # If user was not in Trac DB, ask GitHub API
         if not result:
-            name, email = self._github.get_user(username)
+            name, email = self._github.get_user(username, knownname, knownemail)
             if name:
                 result = "%s <%s>" % (name, email)
             else:
@@ -160,7 +164,15 @@ class GitHubWebhookEnvironment(GenericEnvironment):
                 commit = self._commits[change.rev.sha1]
                 if 'username' in commit['author']:
                     username = commit['author']['username']
-                    author = self._get_username_email(username)
+                    if 'name' in commit['author']:
+                        knownname = commit['author']['name']
+                    else:
+                        knownname = None
+                    if 'email' in commit['author']:
+                        knownemail = commit['author']['email']
+                    else:
+                        knownemail = None
+                    author = self._get_username_email(username, knownname, knownemail)
                 if not author:
                     author = "%s <%s>" % (commit['author']['name'], commit['author']['email'])
                 return author.encode('utf-8')
@@ -201,7 +213,15 @@ class GitHubWebhookEnvironment(GenericEnvironment):
         if 'username' in author and 'username' in committer:
             if author['username'] != committer['username']:
                 username = commit['committer']['username']
-                reply_to_committer = self._get_username_email(username)
+                if 'name' in commit['committer']:
+                    knownname = commit['committer']['name']
+                else:
+                    knownname = None
+                if 'email' in commit['committer']:
+                    knownemail = commit['committer']['email']
+                else:
+                    knownemail = None
+                reply_to_committer = self._get_username_email(username, knownname, knownemail)
         else:
             if author['email'] != committer['email']:
                 name = commit['committer']['name']
