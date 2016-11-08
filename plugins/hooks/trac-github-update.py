@@ -57,7 +57,7 @@ class GitHubWebhookEnvironment(GenericEnvironment):
         self._data = None
         self._pusher = None
         self._pusher_email = None
-        super(GenericEnvironment, self).__init__(**kw)
+        super(GitHubWebhookEnvironment, self).__init__(**kw)
 
     def load_payload(self, payload):
         self._data = json.loads(payload)
@@ -67,7 +67,7 @@ class GitHubWebhookEnvironment(GenericEnvironment):
         if self._pusher:
             return self._pusher
         if not self._data:
-            return super(GenericEnvironment).get_pusher()
+            return super(GitHubWebhookEnvironment, self).get_pusher()
         login = self._data['pusher']['name']
         realname = self._github.get_user(login).name
         if realname:
@@ -80,7 +80,7 @@ class GitHubWebhookEnvironment(GenericEnvironment):
         if self._pusher_email:
             return self._pusher_email
         if not self._data:
-            return super(GenericEnvironment).get_pusher_email()
+            return super(GitHubWebhookEnvironment, self).get_pusher_email()
         login = self._data['pusher']['name']
         name = self._github.get_user(login).name or login
         # GitHub only lists the primary email address in the payload. We do not
