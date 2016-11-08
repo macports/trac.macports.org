@@ -53,8 +53,8 @@ git_multimail.LINK_HTML_TEMPLATE = """\
 
 class TracDB(object):
 
-    def __init__(self, tracenv):
-        self.env = tracenv
+    def __init__(self, tracenvpath):
+        self.env = trac.env.Environment(path=tracenvpath, create=False)
         self.cache = {}
 
     def get_user(self, username):
@@ -86,8 +86,8 @@ class TracDB(object):
 
 class GitHubAPI(object):
 
-    def __init__(self, github):
-        self.github = github
+    def __init__(self, githubtoken):
+        self.github = Github(githubtoken)
         self.cache = {}
 
     def get_user(self, username):
@@ -106,9 +106,9 @@ class GitHubAPI(object):
 
 class GitHubWebhookEnvironment(GenericEnvironment):
 
-    def __init__(self, github, tracenv, **kw):
-        self._github = GitHubAPI(github)
-        self._tracdb = TracDB(tracenv)
+    def __init__(self, githubtoken, tracenvpath, **kw):
+        self._github = GitHubAPI(githubtoken)
+        self._tracdb = TracDB(tracenvpath)
         self._data = None
         self._pusher = None
         self._pusher_email = None
@@ -246,14 +246,13 @@ def main(args):
     config = Config('multimailhook')
 
     # GitHub API
-    token = os.getenv("GITHUB_ACCESS_TOKEN")
-    if not token:
-        token = config.get("githubAccessToken")
-    if not token:
+    githubtoken = os.getenv("GITHUB_ACCESS_TOKEN")
+    if not githubtoken:
+        githubtoken = config.get("githubAccessToken")
+    if not githubtoken:
         sys.stderr.write("Set GITHUB_ACCESS_TOKEN in environment or " +
                          "'git config multimailhook.githubAccessToken <token>'!\n")
         sys.exit(1)
-    github = Github(token)
 
     # Trac Environment
     tracenvpath = os.getenv("TRAC_ENV")
@@ -263,11 +262,10 @@ def main(args):
         sys.stderr.write("Set TRAC_ENV in environment or " +
                          "'git config multimailhook.tracEnv <path>'!\n")
         sys.exit(1)
-    tracenv = trac.env.Environment(path=tracenvpath, create=False)
 
     # Select the type of environment:
     try:
-        environment = GitHubWebhookEnvironment(github, tracenv, config=config)
+        environment = GitHubWebhookEnvironment(githubtoken, tracenvpath, config=config)
     except ConfigurationException:
         sys.stderr.write("%s\n" % sys.exc_info()[1])
         sys.exit(1)
