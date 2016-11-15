@@ -5,10 +5,13 @@
 import sys
 import os
 import json
+import time
+from datetime import datetime
 
 import git_multimail
 from git_multimail import GenericEnvironment, Config, ConfigurationException, \
-                          OutputMailer, ReferenceChange, Revision, Push
+                          OutputMailer, ReferenceChange, Revision, Push, \
+                          IncrementalDateTime, read_git_output
 from github import Github
 import trac.env
 
@@ -48,6 +51,21 @@ git_multimail.LINK_HTML_TEMPLATE = """\
 <p><a href="%(browse_url)s">%(browse_url)s</a></p>
 """
 
+### CLASSES ###
+
+class IncrementalDateTimeWithStartTime(IncrementalDateTime):
+    """Simple wrapper to give incremental date/times.
+
+    Each call will result in a date/time a second later than the previous call,
+    starting at the time set with set_time(). This can be used to falsify email
+    headers, to increase the likelihood that email clients sort the emails
+    correctly."""
+
+    start_time = time.time()
+
+    def __init__(self):
+        super(IncrementalDateTimeWithStartTime, self).__init__()
+        self.time = IncrementalDateTimeWithStartTime.start_time
 
 ### MAIN ###
 
@@ -251,6 +269,12 @@ def run_as_github_webhook(environment, mailer):
         return
 
     change = ReferenceChange.create(environment, oldrev, newrev, refname)
+
+    # get committer time of the newest revision that was pushed
+    timestamp = read_git_output(['log', '--no-walk', '--format=%ct', change.new.sha1])
+    # monkey patch it into git_multimail
+    IncrementalDateTimeWithStartTime.start_time = float(timestamp)
+    git_multimail.IncrementalDateTime = IncrementalDateTimeWithStartTime
 
     push = Push(environment, [change])
     push.send_emails(mailer, body_filter=environment.filter_body)
