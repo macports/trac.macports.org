@@ -270,9 +270,13 @@ def run_as_github_webhook(environment, mailer):
 
     change = ReferenceChange.create(environment, oldrev, newrev, refname)
 
-    # get committer time of the newest revision that was pushed
-    timestamp = read_git_output(['log', '--no-walk', '--format=%ct', change.new.sha1])
-    # monkey patch it into git_multimail
+    if change.new.sha1:
+        # get committer time of the newest revision that was pushed
+        timestamp = read_git_output(['log', '--no-walk', '--format=%ct', change.new.sha1])
+    else:
+        # use current time for tag or branch deletions
+        timestamp = time.time()
+    # monkey patch new time base into git_multimail
     IncrementalDateTimeWithStartTime.start_time = float(timestamp)
     git_multimail.IncrementalDateTime = IncrementalDateTimeWithStartTime
 
