@@ -31,7 +31,7 @@
 
     <py:if test="req.path_info == '/newticket' or req.path_info.startswith('/ticket')">
         <label py:match="label[@for='field-keywords']" py:attrs="select('@*')">
-            <a href="wiki/TicketsKeywordGuidelines" rel="noopener" target="_blank">
+            <a href="/wiki/TicketsKeywordGuidelines" rel="noopener" target="_blank">
                 ${select('*|comment()|text()')}
             </a>
         </label>
