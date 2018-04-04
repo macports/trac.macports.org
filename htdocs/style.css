@@ -44,6 +44,12 @@ h4 :link, h4 :visited, h5 :link, h5 :visited, h6 :link, h6 :visited {
     max-width: 100%;
 }
 
+/* changelog box colors */
+#changelog .changes {
+    background-color: #eee;
+    border-color: #d7d7d7;
+}
+
 /* tickets: colors */
 #ticket {
     background-color: #eee;
