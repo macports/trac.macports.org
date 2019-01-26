@@ -168,9 +168,9 @@ class GitHubWebhookEnvironment(GenericEnvironment):
         if not result:
             name, email = self._github.get_user(username, knownname, knownemail)
             if name:
-                result = "%s <%s>" % (name, email)
+                result = "\"%s\" <%s>" % (name, email)
             else:
-                result = "%s <%s@users.noreply.github.com>" % (username, username)
+                result = "\"%s\" <%s@users.noreply.github.com>" % (username, username)
         return result
 
     def get_fromaddr(self, change=None):
@@ -192,7 +192,7 @@ class GitHubWebhookEnvironment(GenericEnvironment):
                         knownemail = None
                     author = self._get_username_email(username, knownname, knownemail)
                 if not author:
-                    author = "%s <%s>" % (commit['author']['name'], commit['author']['email'])
+                    author = "\"%s\" <%s>" % (commit['author']['name'], commit['author']['email'])
                 return author.encode('utf-8')
         return super(GitHubWebhookEnvironment, self).get_fromaddr(change)
 
