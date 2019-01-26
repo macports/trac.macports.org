@@ -120,6 +120,15 @@ class GitHubAPI(object):
         email = knownemail
         if not email:
             email = "%s@users.noreply.github.com" % (username,)
+
+        # Apply a workaround for GitHub Apps that supplies usernames ending
+        # with a [bot] tag that is rendered as a label on the GitHub web
+        # interface. The WebHook also keeps this [bot] in the local part of the
+        # email address, which is in fact invalid and produces garbage in
+        # the From: header.
+        if email and email.endswith("[bot]@users.noreply.github.com"):
+            email = "%s@users.noreply.github.com" % (username[:-5],)
+
         if name and email:
             self.cache[username] = (name, email)
             return self.cache[username]
