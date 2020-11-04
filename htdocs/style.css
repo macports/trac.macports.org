@@ -93,3 +93,7 @@ fieldset {
 .milestone .info h2 em {
     color: #0155CD;
 }
+
+#footer {
+	display: none !important;
+}

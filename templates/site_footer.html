@@ -1,0 +1,20 @@
+# if req.path_info == '/newticket' and 'preview' not in req.args:
+    <div id="ticket-guidelines-notice" class="macports-ticket-guide">
+        Please read the
+        <a href="http://guide.macports.org/#project.tickets">Ticket Guidelines</a>
+        before submitting!
+    </div>
+    <script type="text/javascript">
+        jQuery(function($) {
+            var $ticket_notice = $("#ticket-guidelines-notice");
+            if ($ticket_notice.length) {
+                $("#propertyform").prepend($ticket_notice.detach());
+            }
+
+            var $keyword_labels = $("label[for='field-keywords']");
+            if ($keyword_labels.length) {
+                $keyword_labels.wrapInner('<a href="/wiki/TicketKeywordGuidelines" rel="noopener" target="_blank"></a>');
+            }
+        });
+    </script>
+# endif
