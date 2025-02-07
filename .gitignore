@@ -1,4 +1,5 @@
 /conf/trac.ini.sample
+/conf/authz_policy.ini
 /conf/secrets.ini
 /db/
 /attachments/
